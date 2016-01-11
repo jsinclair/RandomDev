@@ -14,9 +14,13 @@ import swingaling.server.SwingALingServerInterface;
  * @author jamesTemp
  */
 public class OrcEntity extends SwingALingEntity {
-    public OrcEntity(SwingALingServerInterface server, int x, int y) {
-        super(server, x, y, 10, 10, Color.green, 100, 20);
+    public OrcEntity(SwingALingServerInterface server, int x, int y, EntityFactions faction) {
+        super(server, x, y, 10, 10, Color.green, 100, 20, faction);
         
         idleBehaviour = new GenericIdleBehaviour(this);
+    }
+    
+    public OrcEntity(SwingALingServerInterface server, int x, int y) {
+        this(server, x, y, EntityFactions.ORC);
     }
 }

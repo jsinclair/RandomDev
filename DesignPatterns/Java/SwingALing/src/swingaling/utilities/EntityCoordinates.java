@@ -10,18 +10,15 @@ package swingaling.utilities;
  * @author jamesTemp
  */
 public class EntityCoordinates {
-    private final double x, y;
+    public final double x, y;
     
-    public EntityCoordinates(double x, double y) {
+    public final int width, height;
+    
+    public EntityCoordinates(double x, double y, int width, int height) {
         this.x = x;
         this.y = y;
-    }
-    
-    public double getX() {
-        return x;
-    }
-    
-    public double getY() {
-        return y;
+        
+        this.width = width;
+        this.height = height;
     }
 }

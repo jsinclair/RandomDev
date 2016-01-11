@@ -29,6 +29,12 @@ public class GenericIdleBehaviour extends BaseBehaviour {
     }
     
     @Override
+    public void reset() {
+        currentDistance = 0;
+        currentDirection = DIRECTIONS[(int)(Math.random() * DIRECTIONS.length)];
+    }
+    
+    @Override
     public void executeBehaviour(long timeSinceLastLoop) {
         double execDistance = (idleDistance * timeSinceLastLoop) / 1000.0;
         

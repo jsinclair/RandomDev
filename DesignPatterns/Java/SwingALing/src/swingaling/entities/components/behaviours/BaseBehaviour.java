@@ -19,4 +19,6 @@ public abstract class BaseBehaviour {
     }
     
     public abstract void executeBehaviour(long timePassed);
+    
+    public abstract void reset();
 }

@@ -14,9 +14,13 @@ import swingaling.server.SwingALingServerInterface;
  * @author jamesTemp
  */
 public class OgreEntity extends SwingALingEntity {
-    public OgreEntity(SwingALingServerInterface server, int x, int y) {
-        super(server, x, y, 20, 20, new Color(245, 245, 220), 80, 15);
+    public OgreEntity(SwingALingServerInterface server, int x, int y, EntityFactions faction) {
+        super(server, x, y, 20, 20, new Color(245, 245, 220), 80, 15, faction);
         
         idleBehaviour = new GenericIdleBehaviour(this);
+    }
+    
+    public OgreEntity(SwingALingServerInterface server, int x, int y) {
+        this(server, x, y, EntityFactions.OGRE);
     }
 }

@@ -8,6 +8,7 @@ package swingaling.entities;
 import swingaling.entities.components.TimeListenerController;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import swingaling.entities.components.TimeListener;
@@ -47,13 +48,17 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
     // The server the entity belongs to
     private final SwingALingServerInterface server;
     
+    private final EntityFactions faction;
+    
     // The behaviour that will be executed every loop.
     protected BaseBehaviour currentBehavior = null;
     
     // The different behaviours for different situations
     protected BaseBehaviour idleBehaviour = null;
     
-    public SwingALingEntity(SwingALingServerInterface server, int x, int y, int width, int height, Color color, int visionRadius, int moveSpeed) {
+    private boolean alert = false;
+    
+    public SwingALingEntity(SwingALingServerInterface server, int x, int y, int width, int height, Color color, int visionRadius, int moveSpeed, EntityFactions faction) {
         this.server = server;
         this.x = x;
         this.y = y;
@@ -62,6 +67,7 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
         this.color = color;
         this.visionRadius = visionRadius;
         this.moveSpeed = moveSpeed;
+        this.faction = faction;
         
         timeListenerList = new CopyOnWriteArrayList<>();
         
@@ -90,6 +96,18 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
     protected void onThink() {
         // this will go through things and decide what to do.
         // For now we just make the orc idle.
+        //System.out.println("this: "+this.getClass().getName());
+        List<SwingALingEntity> visibleEntities = new LinkedList<>();
+        server.getEntities().stream().forEach((entity) -> {
+            if (!entity.equals(this)) {
+                if (canSeeCoordinates(entity.getEntityCoordinates())) {
+                    visibleEntities.add(entity);
+                }
+            }
+        });
+        
+        alert = visibleEntities.size() > 0;
+        
         if (currentBehavior != idleBehaviour) {
             currentBehavior = idleBehaviour;
         }
@@ -99,6 +117,11 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
     public void draw(Graphics2D surface) {
         surface.setColor(color);
         surface.fillRect((int)x, (int)y, width, height);
+        
+        if (alert) {
+            surface.setColor(Color.yellow);
+            surface.drawString("!", (int)x + width / 2, (int)y - 0x2);
+        }
     }
     
     @Override
@@ -142,6 +165,39 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
     }
     
     public EntityCoordinates getEntityCoordinates() {
-        return new EntityCoordinates(x, y);
+        return new EntityCoordinates(x, y, width, height);
+    }
+    
+    public boolean canSeeCoordinates(EntityCoordinates coords) {
+        // Start by getting the center point of this entity:
+        double centerX = x + width/2;
+        double centerY = y + height/2;
+        
+        // Check that the other entity isnt on top of this one
+        if ((centerX > coords.x && centerX < coords.x + coords.width) && 
+                (centerY > coords.y && centerY < coords.y + coords.height)) {
+            return true;
+        }
+        
+        // Then we need to calculate the closest point in the coordinates 
+        // to the entity.
+        double xPoint = coords.x + coords.width/2;
+        double yPoint = coords.y + coords.height/2;
+        
+        // Then see if that falls inside this entity's vision radius.
+        /*System.out.println("visionRadius: "+visionRadius);
+        System.out.println("xPoint: "+xPoint);
+        System.out.println("yPoint: "+yPoint);
+        System.out.println("centerX: "+centerX);
+        System.out.println("centerY: "+centerY);
+        double theD = (xPoint - centerX) * (xPoint - centerX) 
+                + (yPoint - centerY) * (yPoint - centerY);
+        System.out.println("theD: "+theD);
+        System.out.println("d: "+Math.sqrt(theD));
+        System.out.println("d2: "+Math.sqrt((xPoint - centerX) * (xPoint - centerX) 
+                + (yPoint - centerY) * (yPoint - centerY)));*/
+        
+        return visionRadius * visionRadius >= (xPoint - centerX) * (xPoint - centerX) 
+                + (yPoint - centerY) * (yPoint - centerY);
     }
 }

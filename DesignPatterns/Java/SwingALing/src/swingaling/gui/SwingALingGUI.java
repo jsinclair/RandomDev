@@ -77,7 +77,7 @@ public class SwingALingGUI extends JFrame implements KeyListener {
     }
     
     private void initGUI() {
-        this.setSize(400, 400);
+        this.setSize(AREA_WIDTH, AREA_HEIGHT);
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
