@@ -3,17 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/SwingALing.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/entities/SwingALingEntity.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/entities/EntityFactory.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/entities/components/TimeListener.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/entities/EntityTypes.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/gui/SwingALingGUI.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/entities/OrcEntity.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/server/SwingALingServer.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/gui/SwingALingDrawable.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/entities/components/TimeListenerController.java</file>
-            <file>file:/C:/Users/jamesTemp/Documents/NetBeansProjects/SwingALing/src/swingaling/entities/components/behaviours/BaseBehaviour.java</file>
+            <file>file:/C:/Users/jamesTemp/Documents/Dev/DesignPatterns/Java/SwingALing/src/swingaling/utilities/UtilFunctions.java</file>
+            <file>file:/C:/Users/jamesTemp/Documents/Dev/DesignPatterns/Java/SwingALing/src/swingaling/entities/components/behaviours/BaseBehaviour.java</file>
+            <file>file:/C:/Users/jamesTemp/Documents/Dev/DesignPatterns/Java/SwingALing/src/swingaling/utilities/ValuePair.java</file>
+            <file>file:/C:/Users/jamesTemp/Documents/Dev/DesignPatterns/Java/SwingALing/src/swingaling/utilities/EntityCoordinates.java</file>
+            <file>file:/C:/Users/jamesTemp/Documents/Dev/DesignPatterns/Java/SwingALing/src/swingaling/entities/components/behaviours/GenericIdleBehaviour.java</file>
+            <file>file:/C:/Users/jamesTemp/Documents/Dev/DesignPatterns/Java/SwingALing/src/swingaling/entities/SwingALingEntity.java</file>
         </group>
     </open-files>
 </project-private>

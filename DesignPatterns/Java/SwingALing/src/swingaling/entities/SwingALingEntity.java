@@ -8,6 +8,7 @@ package swingaling.entities;
 import swingaling.entities.components.TimeListenerController;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -17,6 +18,8 @@ import swingaling.gui.SwingALingDrawable;
 import swingaling.gui.SwingALingGUI;
 import swingaling.server.SwingALingServerInterface;
 import swingaling.utilities.EntityCoordinates;
+import swingaling.utilities.UtilFunctions;
+import swingaling.utilities.ValuePair;
 
 /**
  *
@@ -97,11 +100,12 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
         // this will go through things and decide what to do.
         // For now we just make the orc idle.
         //System.out.println("this: "+this.getClass().getName());
-        List<SwingALingEntity> visibleEntities = new LinkedList<>();
+        List<ValuePair> visibleEntities = new LinkedList<>();
         server.getEntities().stream().forEach((entity) -> {
             if (!entity.equals(this)) {
-                if (canSeeCoordinates(entity.getEntityCoordinates())) {
-                    visibleEntities.add(entity);
+                ValuePair canSeePair = canSeeCoordinates(entity.getEntityCoordinates());
+                if ((boolean)canSeePair.getLeft()) {
+                    visibleEntities.add(new ValuePair(entity, canSeePair.getRight()));
                 }
             }
         });
@@ -142,6 +146,19 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
     }
     
     public final void moveVertical(final int speedMod, final double distance) {
+        
+        boolean collision = false;
+        EntityCoordinates collisionCoordinates = null;
+        Iterator<SwingALingEntity> entities = server.getEntities().iterator();
+        while (entities.hasNext()) {
+            EntityCoordinates entityCoords = entities.next().getEntityCoordinates();
+            boolean doesCollide = UtilFunctions.coordinatesCollide(x, y + (distance * speedMod), width, height, entityCoords.x, entityCoords.y, entityCoords.width, entityCoords.height);
+            if (doesCollide) {
+                collision = true;
+                collisionCoordinates = collisionCoordinates;
+            }
+        }
+        
         y += (distance * speedMod);
         
         y = y < 0 ? 0 : y;
@@ -168,7 +185,7 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
         return new EntityCoordinates(x, y, width, height);
     }
     
-    public boolean canSeeCoordinates(EntityCoordinates coords) {
+    public ValuePair canSeeCoordinates(EntityCoordinates coords) {
         // Start by getting the center point of this entity:
         double centerX = x + width/2;
         double centerY = y + height/2;
@@ -176,7 +193,7 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
         // Check that the other entity isnt on top of this one
         if ((centerX > coords.x && centerX < coords.x + coords.width) && 
                 (centerY > coords.y && centerY < coords.y + coords.height)) {
-            return true;
+            return new ValuePair(true, 0);
         }
         
         // Then we need to calculate the closest point in the coordinates 
@@ -189,15 +206,17 @@ public abstract class SwingALingEntity implements SwingALingDrawable, TimeListen
         System.out.println("xPoint: "+xPoint);
         System.out.println("yPoint: "+yPoint);
         System.out.println("centerX: "+centerX);
-        System.out.println("centerY: "+centerY);
-        double theD = (xPoint - centerX) * (xPoint - centerX) 
-                + (yPoint - centerY) * (yPoint - centerY);
-        System.out.println("theD: "+theD);
+        System.out.println("centerY: "+centerY);*/
+        double theD = Math.sqrt((xPoint - centerX) * (xPoint - centerX) 
+                + (yPoint - centerY) * (yPoint - centerY));
+        /*System.out.println("theD: "+theD);
         System.out.println("d: "+Math.sqrt(theD));
         System.out.println("d2: "+Math.sqrt((xPoint - centerX) * (xPoint - centerX) 
                 + (yPoint - centerY) * (yPoint - centerY)));*/
         
-        return visionRadius * visionRadius >= (xPoint - centerX) * (xPoint - centerX) 
-                + (yPoint - centerY) * (yPoint - centerY);
+        //return visionRadius * visionRadius >= (xPoint - centerX) * (xPoint - centerX) 
+        //       + (yPoint - centerY) * (yPoint - centerY);
+        
+        return new ValuePair(visionRadius >= theD, theD);
     }
 }
